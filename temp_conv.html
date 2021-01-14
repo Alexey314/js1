@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script >
+        "use strict";
+        let Tc = prompt("Введите значение температуры в градусах Цельсия (число):", "");
+        let Tc_valid = typeof Tc == "string";
+        Tc = parseInt(Tc);
+        Tc_valid &&= !isNaN(Tc);
+        if (Tc_valid) {
+            let Tf = (9 / 5) * Tc + 32;
+            alert(`Температура по Фаренгейту: ${Tf}`);
+        } else {
+            alert("Введено неверное значение!");
+        }
+    </script>
+</body>
+</html>

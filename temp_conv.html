@@ -9,7 +9,7 @@
         "use strict";
         let Tc = prompt("Введите значение температуры в градусах Цельсия (число):", "");
         let Tc_valid = typeof Tc == "string";
-        Tc = parseInt(Tc);
+        Tc = parseFloat(Tc);
         Tc_valid &&= !isNaN(Tc);
         if (Tc_valid) {
             let Tf = (9 / 5) * Tc + 32;

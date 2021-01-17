@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    /* ЗАДАНИЕ */
+    /* Реализовать основные 4 арифметические операции (+, -, /, *) в виде функций с двумя
+параметрами. Т.е. например, функция для сложения должна принимать два числа, складывать их
+и возвращать результат.
+Обязательно использовать оператор return.*/
+
+    /* РЕШЕНИЕ */
+
+    /**
+     * Функция суммирования.
+     * @param {number} x - число
+     * @param {number} y - число
+     * @return {number} результат вычисления x + y
+     * */
+    function sum(x, y) {
+        return x + y;
+    }
+
+    /**
+     * Функция вычитания.
+     * @param {number} x - число
+     * @param {number} y - число
+     * @return {number} результат вычисления x - y
+     * */
+    const sub = function (x, y) {
+        return x - y;
+    };
+
+    /**
+     * Функция деления.
+     * @param {number} x - число
+     * @param {number} y - число
+     * @return {number} результат вычисления x / y
+     * */
+    const div = (x, y) => {
+        return x / y;
+    };
+
+    /**
+     * Функция умножения.
+     * @param {number} x - число
+     * @param {number} y - число
+     * @return {number} результат вычисления x * y
+     * */
+    const mul = (() => (x, y) => {
+        return x * y;
+    })();
+
+    // Тестируем на случайных целых значениях
+    const r = () => Math.round(Math.random() * 100);
+    [
+        `sum(${r()},${r()})`,
+        `sub(${r()},${r()})`,
+        `div(${r()},${r()})`,
+        `mul(${r()},${r()})`,
+    ].forEach((value) => console.log(`${value} = ${eval(value)}`));
+
+    // Получаем в консоли:
+    // sum(2,51) = 53
+    // sub(51,27) = 24
+    // div(18,1) = 18
+    // mul(30,40) = 1200
+</script>
+</body>
+</html>

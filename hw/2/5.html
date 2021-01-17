@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    /* ЗАДАНИЕ */
+    /* Реализовать функцию с тремя параметрами: function mathOperation(arg1, arg2, operation),
+где arg1, arg2 – значения аргументов, operation – строка с названием операции. В зависимости от
+переданного значения операции (использовать switch) выполнить одну из арифметических
+операций
+(использовать функции из задания 4) и вернуть полученное значение.*/
+
+    /* РЕШЕНИЕ */
+
+    /**
+     * Функция суммирования.
+     * @param {number} x - число
+     * @param {number} y - число
+     * @return {number} результат вычисления x + y
+     * */
+    function sum(x, y) {
+        return x + y;
+    }
+
+    /**
+     * Функция вычитания.
+     * @param {number} x - число
+     * @param {number} y - число
+     * @return {number} результат вычисления x - y
+     * */
+    const sub = function (x, y) {
+        return x - y;
+    };
+
+    /**
+     * Функция деления.
+     * @param {number} x - число
+     * @param {number} y - число
+     * @return {number} результат вычисления x / y
+     * */
+    const div = (x, y) => {
+        return x / y;
+    };
+
+    /**
+     * Функция умножения.
+     * @param {number} x - число
+     * @param {number} y - число
+     * @return {number} результат вычисления x * y
+     * */
+    const mul = (() => (x, y) => {
+        return x * y;
+    })();
+
+    /**
+     * Универсальная математическая функция. Может выполнять с аргументами операции, заданные в аргументе operation
+     * @param {number} arg1 - число
+     * @param {number} arg2 - число
+     * @param {string} operation - название операции, в любом регистре: "sum" | "sub" | "div" | "mul".
+     * @return {number} результат вычисления x operation y
+     * @throws {Error} если переданное значение operation не поддерживается
+     * */
+    function mathOperation(arg1, arg2, operation) {
+
+        // Убираем внешние пробелы и приводим к нижнему регистру
+        operation = operation.trim().toLowerCase();
+
+        // Проверяем поддержку операции и выполняем ее, по возможности
+        switch (operation) {
+            case "sum":
+                return sum(arg1, arg2);
+            case "sub":
+                return sub(arg1, arg2);
+            case "div":
+                return div(arg1, arg2);
+            case "mul":
+                return mul(arg1, arg2);
+            default:
+                // operation содержит непредусмотренное значение, падаем
+                throw new Error(`mathOperation(): Задано неподдерживаемое действие: ${operation}`);
+        }
+    }
+
+    /* Тестируем на случайных целых значениях, проверяем толерантность к регистру и пробелам в названии операции и
+    подсовываем непредусмотренное название операции pow, чтобы проверить срабатывание исключения.  */
+    try {
+        const r = () => Math.round(Math.random() * 100);
+        [
+            `mathOperation(${r()},${r()}, \" sum\")`,
+            `mathOperation(${r()},${r()}, \"Sub\")`,
+            `mathOperation(${r()},${r()}, \"DIV\")`,
+            `mathOperation(${r()},${r()}, \"mul \")`,
+            `mathOperation(${r()},${r()}, \"pow\")`,
+        ].forEach((value) => console.log(`${value} = ${eval(value)}`));
+    } catch (error) {
+        console.log(error);
+    }
+
+    // Получаем в консоли:
+    // mathOperation(80,66, " sum") = 146
+    // mathOperation(83,95, "Sub") = -12
+    // mathOperation(56,27, "DIV") = 2.074074074074074
+    // mathOperation(6,91, "mul ") = 546
+    // Error: mathOperation(): Задано неподдерживаемое действие: pow
+    // at mathOperation (5.html?_ijt=55epfecm154fln0s4ua27nc4ht:92)
+    // at eval (eval at <anonymous> (5.html?_ijt=55epfecm154fln0s4ua27nc4ht:98), <anonymous>:1:1)
+    // at 5.html?_ijt=55epfecm154fln0s4ua27nc4ht:105
+    // at Array.forEach (<anonymous>)
+    // at 5.html?_ijt=55epfecm154fln0s4ua27nc4ht:105
+</script>
+</body>
+</html>

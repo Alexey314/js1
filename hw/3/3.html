@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    /* ЗАДАНИЕ */
+    /*Перед вами находится массив с продуктами, сегодня распродажа и вам нужно на каждый товар применить скидку
+15%, можете использовать метод forEach https://mzl.la/1AOMMWX :*/
+
+    /* РЕШЕНИЕ */
+
+    const products = [
+        {
+            id: 3,
+            price: 200,
+        },
+        {
+            id: 4,
+            price: 900,
+        },
+        {
+            id: 1,
+            price: 1000,
+        },
+    ];
+
+    //Вводим процент скидки
+    const DISCOUNT_PERCENT = 15;
+
+    //Вычисляем множитель для получения цен со скидкой
+    const DISCOUNT_FACTOR = (100 - DISCOUNT_PERCENT) / 100;
+
+    //Обходим массив объектов
+    //Поскольку не указано иное, цены со скидкой пишем на место старых в том же массиве
+    products.forEach((product) => {
+        //Вычисляем значение цены со скидкой и неограниченной точностью
+        product.price = product.price * DISCOUNT_FACTOR;
+
+        //Ограничиваем дробную часть цены до 2 знаков
+        product.price = +product.price.toFixed(2);
+    });
+
+    //Выводим результат
+    console.log(products);
+
+    /* РЕЗУЛЬТАТ */
+
+    /*
+0: {id: 3, price: 170}
+1: {id: 4, price: 765}
+2: {id: 1, price: 850}
+*/
+
+</script>
+</body>
+</html>

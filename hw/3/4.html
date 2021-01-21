@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    /* ЗАДАНИЕ */
+    /*Перед вами находится массив с продуктами в интернет-магазине. Вам нужно:
+1. Получить все товары, у которых есть фотографии, можете использовать метод filter https://mzl.la/2qROQkT
+2. Отсортируйте товары по цене (от низкой цены к высокой), можете использовать метод sort
+https://mzl.la/2Y79hbZ , как устроен sort можно посмотреть например здесь https://youtu.be/O2pusOp0gC0*/
+
+    /* РЕШЕНИЕ */
+
+    const products = [
+        {
+            id: 3,
+            price: 127,
+            photos: [
+                "1.jpg",
+                "2.jpg",
+            ]
+        },
+        {
+            id: 5,
+            price: 499,
+            photos: []
+        },
+        {
+            id: 10,
+            price: 26,
+            photos: [
+                "3.jpg"
+            ]
+        },
+        {
+            id: 8,
+            price: 78,
+        },
+    ];
+
+    //Создаем новый массив из объектов исходного, соответствующих критерию наличия фоток
+    const productsWithPhoto = products.filter((product) => {
+        /* Проверяем наличие у объекта товара свойства photos в принципе,
+        * что это свойство - массив и что его длина больше нуля. */
+        return ("photos" in product)
+            && product.propertyIsEnumerable("photos")
+            && product.photos.length;
+    });
+
+    //Выводим результат с фотками
+    console.log(productsWithPhoto);
+
+    /* РЕЗУЛЬТАТ
+        0: {id: 3, price: 127, photos: Array(2)}
+        1: {id: 10, price: 26, photos: Array(1)}
+    */
+
+    //Сортируем исходный массив по возрастанию значения цены
+    products.sort((a, b) => a.price - b.price);
+
+    //Выводим отсортированный по цене результат
+    console.log(products);
+
+    /* РЕЗУЛЬТАТ
+        0: {id: 10, price: 26, photos: Array(1)}
+        1: {id: 8, price: 78}
+        2: {id: 3, price: 127, photos: Array(2)}
+        3: {id: 5, price: 499, photos: Array(0)}
+    */
+
+</script>
+</body>
+</html>

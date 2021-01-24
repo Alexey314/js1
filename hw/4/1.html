@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    /* ЗАДАНИЕ */
+    /* Написать функцию, преобразующую число в объект. Передавая на вход число в диапазоне [0, 999],
+    мы должны получить на выходе объект, в котором в соответствующих свойствах описаны разряды числа:
+        - единицы (в свойстве units)
+        - десятки (в свойстве tens)
+        - сотни (в свойстве hundereds)
+    Например, для числа 45 мы должны получить следующий объект:
+    {
+        units: 5, //это единицы
+        tens: 4, //это десятки
+        hundreds: 0, //это сотни
+    }
+    Если число было передано вне [0, 999] диапазона, не целое число или вообще не число,
+    необходимо выдать соответствующее сообщение с помощью console.log и вернуть пустой объект.*/
+
+    /* РЕШЕНИЕ 1 */
+
+    /**
+     * Возвращает объект со свойствами единиц, десятков и сотен, отражающими значение переданного целого аргумента в
+     * диапазоне 0-999. В случае ошибки возвращает null.
+     * */
+    function splitDecimalPlaces1(numVal) {
+        // фильтруем значение параметра
+        if (isNaN(numVal) || !Number.isInteger(numVal) || numVal < 0 || numVal > 999)
+            return null;
+
+        /* При отсутствии целочисленного типа, проще конвертнуть число в строку и взять значения разрядов из
+         символов строки в нужной позиции, чтобы не связываться с FP математикой. Затем строку превращаем в массив,
+         обращаем порядок элементов и получаем массив значений разрядов исходного числа. Только в нем нет ведущих
+         нулевых значений - просто добавим парочку нулей вначале строки, одновременно с приведением числа к строке. */
+        const digitChars = [...("00" + numVal)].reverse();// ['0','0','0'] - ['9','9','9','0','0']
+
+        // возвращаем объект со значениями свойств из соответствующего символа строки
+        return {
+            units: +digitChars[0], //это единицы
+            tens: +digitChars[1], //это десятки
+            hundreds: +digitChars[2], //это сотни
+        };
+    }
+
+    // тестируем на граничных значениях
+    console.log('test 1');
+    [
+        NaN, 0, 9, 21, 99, 321, 999
+    ].forEach(value => console.log(splitDecimalPlaces1(value)));
+
+    /* РЕШЕНИЕ 2 */
+
+    /**
+     * Возвращает объект со свойствами единиц, десятков и сотен, отражающими значение переданного целого аргумента в
+     * диапазоне 0-999. В случае ошибки возвращает null.
+     * */
+    function splitDecimalPlaces2(numVal) {
+        // фильтруем значение параметра
+        if (isNaN(numVal) || !Number.isInteger(numVal) || numVal < 0 || numVal > 999)
+            return null;
+
+        /**
+         * Возвращает десятичное значение в разряде place числа numVal. Разряды считаем с 0.
+         * Для 1-го разряда числа 321: 321 % 100 = 21; 21 / 10 = 2.1; floor(2.1) = 2
+         * Надеемся не столкнуться с особенности FP математики, типа 0.7 * 0.1 = 0.06999999999999999
+         * */
+        const getDecimalPlace = place => Math.floor((numVal % 10**(place+1))/(10**place));
+
+        // возвращаем объект с вычисленными значениями свойств
+        return {
+            units: getDecimalPlace(0), //это единицы
+            tens: getDecimalPlace(1), //это десятки
+            hundreds: getDecimalPlace(2), //это сотни
+        };
+    }
+
+    // тестируем на граничных значениях
+    console.log('test 2');
+    [
+        NaN, 0, 9, 21, 99, 321, 999
+    ].forEach((value) => console.log(splitDecimalPlaces2(value)));
+
+    /**
+     * Реконструирует число из объекта*/
+    function objToNumber(obj){
+        return obj.hundreds*100 + obj.tens*10 + obj.units;
+    }
+
+    // тестируем весь диапазон и выводим ошибку при обнаружении
+    for (let i = 0; i < 1000; i++){
+        if (i !== objToNumber(splitDecimalPlaces1(i)))
+            console.log(`splitDecimalPlaces1 error at i = ${i}`);
+        if (i !== objToNumber(splitDecimalPlaces2(i)))
+            console.log(`splitDecimalPlaces2 error at i = ${i}`);
+    }
+
+    /* РЕЗУЛЬТАТ */
+    /*
+    test 1
+    null
+    {units: 0, tens: 0, hundreds: 0}
+    {units: 9, tens: 0, hundreds: 0}
+    {units: 1, tens: 2, hundreds: 0}
+    {units: 9, tens: 9, hundreds: 0}
+    {units: 1, tens: 2, hundreds: 3}
+    {units: 9, tens: 9, hundreds: 9}
+    test 2
+    null
+    {units: 0, tens: 0, hundreds: 0}
+    {units: 9, tens: 0, hundreds: 0}
+    {units: 1, tens: 2, hundreds: 0}
+    {units: 9, tens: 9, hundreds: 0}
+    {units: 1, tens: 2, hundreds: 3}
+    {units: 9, tens: 9, hundreds: 9}
+    */
+
+</script>
+</body>
+</html>

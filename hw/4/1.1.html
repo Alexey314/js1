@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    /* ЗАДАНИЕ */
+    /* Сделайте в стиле es5, а затем в стиле es6 (по аналогии из дополнительных видео -> 3 примеры
+наследования -> типы на es5 и es6), конструктор Product, который принимает параметры name и price, сохраните
+их как свойства объекта. Также объекты типа Product должны иметь метод make25PercentDiscount, который будет
+уменьшать цену в объекте на 25%. Имейте в виду, что метод make25PercentDiscount не должен быть внутри
+функции-конструктора, и также не нужно создавать отдельный объект-прототип (как объект transport в уроке).*/
+
+    /* РЕШЕНИЕ ES5 */
+
+    function ProductES5(name, price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    ProductES5.prototype.make25PercentDiscount = function () {
+        this.price = +(this.price * 0.75).toFixed(2);
+    }
+
+    const productES5 = new ProductES5('pen', 99);
+
+    console.log('New product ES5:');
+    console.log(productES5);
+
+    productES5.make25PercentDiscount();
+
+    console.log('Product ES5 with discount:');
+    console.log(productES5);
+
+    /* РЕШЕНИЕ ES6 */
+
+    class ProductES6 {
+        constructor(name, price) {
+            this.name = name;
+            this.price = price;
+        }
+
+        make25PercentDiscount () {
+            this.price = +(this.price * 0.75).toFixed(2);
+        }
+    }
+
+    const productES6 = new ProductES6('pencil', 79);
+
+    console.log('New product ES6:');
+    console.log(productES6);
+
+    productES6.make25PercentDiscount();
+
+    console.log('Product ES6 with discount:');
+    console.log(productES6);
+
+    /* РЕЗУЛЬТАТ */
+    /*
+    New product ES5:
+    ProductES5 {name: "pen", price: 99}
+    Product ES5 with discount:
+    ProductES5 {name: "pen", price: 74.25}
+    New product ES6:
+    ProductES6 {name: "pencil", price: 79}
+    Product ES6 with discount:
+    ProductES6 {name: "pencil", price: 59.25}
+    */
+
+</script>
+</body>
+</html>

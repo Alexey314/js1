@@ -1,189 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+
 <body>
-<script>
-    "use strict";
+    <h1>Игра "Кто хочет стать миллионером"</h1>
+    <h2 id="question"></h2>
+    <h2 id="buttons">Нажмите для ответа:
+        <button id="btn1" onclick="onBtnClick(0)"></button>
+        <button id="btn2" onclick="onBtnClick(1)"></button>
+        <button id="btn3" onclick="onBtnClick(2)"></button>
+        <button id="btn4" onclick="onBtnClick(3)"></button>
+    </h2>
+    <button id="stop" onclick="onBtnClick(777)">Завершить игру</button>
+    <button id="restart" onclick="onBtnClick(888)">Сыграть ещё</button>
 
-    /* ЗАДАНИЕ */
-    /* На базе игры (приняв за пример), созданной в дополнительных видео, реализовать игру «Кто хочет стать миллионером?».
-    Т.е. у вас должен быть главный объект, содержащий всю логику игры, который будет иметь методы, например
-    метод run, возможно метод init и т.д.
-    В игре должны быть заранее подготовлены список вопросов и ответов (как минимум 5 вопросов).
-    Игра должна приветствовать пользователя, после чего задавать вопросы пользователю и предлагать варианты
-    ответов в виде теста, например:
-    Сколько букв в слове "привет":
-    a. Пять.
-    b. Шесть.
-    c. Семь.
-    d. Куда я попал?
-    Проверять правильный вариант выбрал пользователь или нет, необходимо вести счет.
-    По окончании игры, когда было задано 5 вопросов, вы должны сообщить пользователю его счет и предложить
-    сыграть снова.
-    Также должна быть возможность выхода из игры заранее, если пользователю надоело играть.*/
+    <script>
+        "use strict";
 
-    /* РЕШЕНИЕ */
+        /* ЗАДАНИЕ */
+        /* На базе игры (приняв за пример), созданной в дополнительных видео, реализовать игру «Кто хочет стать миллионером?».
+        Т.е. у вас должен быть главный объект, содержащий всю логику игры, который будет иметь методы, например
+        метод run, возможно метод init и т.д.
+        В игре должны быть заранее подготовлены список вопросов и ответов (как минимум 5 вопросов).
+        Игра должна приветствовать пользователя, после чего задавать вопросы пользователю и предлагать варианты
+        ответов в виде теста, например:
+        Сколько букв в слове "привет":
+        a. Пять.
+        b. Шесть.
+        c. Семь.
+        d. Куда я попал?
+        Проверять правильный вариант выбрал пользователь или нет, необходимо вести счет.
+        По окончании игры, когда было задано 5 вопросов, вы должны сообщить пользователю его счет и предложить
+        сыграть снова.
+        Также должна быть возможность выхода из игры заранее, если пользователю надоело играть.*/
 
-    /**
-     * Игра-бродилка. Игровое поле рисует в окне браузера. Управление нажатием цифр 1,2,3,6,9,8,7,4. Каждое нажатие
-     * смещает текущее положение игрока в одном или двух направлениях сразу. Игрок может упереться в одну или две
-     * границы игрового поля сразу. В таком случае движение прекращается до смены направления. */
-    class BecomeMillionaire {
-        // счетчик ответов
-        level = 0;
-
-        /**
-         * Конструктор создает набор заданий. */
-        constructor() {
-            const qObj = (questionStr, answersArr, validAnswerIndex) => ({
-                question: questionStr,
-                answers: answersArr,
-                validAnswer: validAnswerIndex
-            });
-            this.questions = [
-                qObj("Фамилия первого космонавта",
-                    ["Иванов", "Никсон", "Гагарин", "Куклачев"],
-                    2),
-                qObj("Среднестатистическое количество колес у автомобиля",
-                    ["Три", "Четыре", "Пять", "Шесть"],
-                    1),
-                qObj("Стандартное напряжение бытовой электросети в России",
-                    ["110В", "380В", "220В", "440В"],
-                    2),
-                qObj("Сколько в РФ часовых поясов",
-                    ["3", "15", "5", "11"],
-                    3),
-                qObj("Где обычно зимует медведь",
-                    ["В дупле", "В гнезде", "В берлоге", "В юрте"],
-                    2),
-            ];
-        }
+        /* РЕШЕНИЕ */
 
         /**
-         * Отрисовывает игровое поле с текущим положением игрока. Начало координат в левом верхнем углу. */
-        draw() {
-            let screen = "";
-            for (let row = 0; row < this.height; row++) {
-                for (let col = 0; col < this.width; col++) {
-                    if (this.x === col && this.y === row)
-                        screen += "o ";
-                    else
-                        screen += "- ";
+         * Игра Кто Хочет Стать Миллионером. Для запуска вызвать метод start(). */
+        class BecomeMillionaire {
+            // счетчик ответов
+            score = 0;
+            // объект с вопросом и ответами
+            currentQuestion = null;
+            // пул вопросов одного сеанса игры
+            questionPool = [];
+
+            /**
+             * Конструктор создает набор заданий. */
+            constructor() {
+                const qObj = (questionStr, answersArr, validAnswerIndex) => ({
+                    question: questionStr,
+                    answers: answersArr,
+                    validAnswer: validAnswerIndex
+                });
+                this.questions = [
+                    qObj("Фамилия первого космонавта",
+                        ["Иванов", "Никсон", "Гагарин", "Куклачев"],
+                        2),
+                    qObj("Среднестатистическое количество колес у автомобиля",
+                        ["Три", "Четыре", "Пять", "Шесть"],
+                        1),
+                    qObj("Стандартное напряжение бытовой электросети в России",
+                        ["110В", "380В", "220В", "440В"],
+                        2),
+                    qObj("Сколько в РФ часовых поясов",
+                        ["3", "15", "5", "11"],
+                        3),
+                    qObj("Где обычно зимует медведь",
+                        ["В дупле", "В гнезде", "В берлоге", "В юрте"],
+                        2),
+                ];
+            }
+
+            /**
+             * Выводит вопрос и варианты ответов */
+            draw() {
+                document.getElementById("question").innerText = "Вопрос: " + this.currentQuestion.question;
+                document.getElementById("btn1").innerText = this.currentQuestion.answers[0];
+                document.getElementById("btn2").innerText = this.currentQuestion.answers[1];
+                document.getElementById("btn3").innerText = this.currentQuestion.answers[2];
+                document.getElementById("btn4").innerText = this.currentQuestion.answers[3];
+                document.getElementById("buttons").hidden = false;
+            }
+
+            /**
+             * Генерирует случайный вопрос из тех, что не были заданы. */
+            nextQuestion() {
+                // Удаляем использованный вопрос из пула
+                if (this.currentQuestion !== null) {
+                    const idx = this.questionPool.findIndex(val => val === this.currentQuestion);
+                    if (idx != -1)
+                        this.questionPool.splice(idx, 1);
                 }
-                screen += "<br>";
+
+                // Берем новый случайный вопрос если остались в пуле
+                if (this.questionPool.length > 0)
+                    this.currentQuestion = this.questionPool[(Math.random() * this.questionPool.length) | 0];
+                else
+                    this.currentQuestion = null;
             }
-            document.body.innerHTML = screen;
-        }
 
-        /**
-         * Инициализирует игру и отрисовывает случайное начальное положение игрока*/
-        start() {
-            this.x = (Math.random() * this.width) | 0;
-            this.y = (Math.random() * this.height) | 0;
-            this.draw();
-        }
+            /**
+             * Инициализирует игру и показывает первый вопрос*/
+            start() {
+                this.score = 0;
+                // Заполняем пул вопросами
+                this.questionPool = this.questions.slice();
+                // Генерим первый вопрос
+                this.nextQuestion();
+                // Показываем первый вопрос
+                this.draw();
+            }
 
-        /**
-         * Перемещает текущее положение игрока на заданное кол-во шагов по X и Y с отрисовкой.
-         * @param {Number} byX - смещение по X, целое число с учетом знака.
-         * @param {Number} byY - смещение по Y, целое число с учетом знака.*/
-        move(byX, byY) {
-            this.x += byX;
-            if (this.x < 0)
-                this.x = 0;
-            if (this.x > (this.width - 1))
-                this.x = this.width - 1;
-            this.y -= byY; // система координат начинается сверху, переворачиваем движение
-            if (this.y < 0)
-                this.y = 0;
-            if (this.y > (this.height - 1))
-                this.y = this.height - 1;
-            this.draw();
-        }
-    }
+            /**
+             * Показывает счет
+            */
+            showResult() {
+                document.getElementById("question").innerText = `Ваш счет: ${this.score} из ${this.questions.length}`;
+                document.getElementById("buttons").hidden = true;
+            }
 
-    const walker = new Walker(25, 25);
+            /**
+             * Проверяет вариант ответа по индексу и переходит к следующему или показывает счет, если вопросы кончились.
+             * @param {Number} num - индекс ответа.
+            */
+            giveAnswer(num) {
+                // Проверяем ответ и ведем счет
+                if (num === this.currentQuestion.validAnswer)
+                    ++this.score;
 
-    walker.start();
+                // Генерим следующий вопрос
+                this.nextQuestion();
 
-    // Вешаем обработчик нажатия кнопок
-    document.addEventListener("keydown", function (event) {
-        if (event.defaultPrevented) {
-            return; // Should do nothing if the default action has been cancelled
-        }
-
-        let handled = false;
-        if (event.key !== undefined) {
-            handled = true;
-            // По значению нажатой кнопки двигаем положение игрока в нужном направлении
-            switch (event.key) {
-                case "1":
-                    walker.move(-1, -1);
-                    break;
-                case "2":
-                    walker.move(0, -1);
-                    break;
-                case "3":
-                    walker.move(1, -1);
-                    break;
-                case "6":
-                    walker.move(1, 0);
-                    break;
-                case "9":
-                    walker.move(1, 1);
-                    break;
-                case "8":
-                    walker.move(0, 1);
-                    break;
-                case "7":
-                    walker.move(-1, 1);
-                    break;
-                case "4":
-                    walker.move(-1, 0);
-                    break;
-                default:
-                    handled = false;
+                // Если вопрос есть, выводим его, иначе выводим результат 
+                if (this.currentQuestion !== null)
+                    this.draw();
+                else
+                    this.showResult();
             }
         }
 
-        if (handled) {
-            // Suppress "double action" if event handled
-            event.preventDefault();
+        const game = new BecomeMillionaire();
+
+        // Инициализируем игру и выводим первый вопрос
+        game.start();
+
+        /**
+         * Обрабатывает нажатие кнопок по переданному из разметки числовому коду
+         * и вызывает соответствующие методы объекта игры.
+        */
+        function onBtnClick(btnNum) {
+            switch (btnNum) {
+                // Завершает игру и показывает счет
+                case 777: game.showResult(); break;
+                // Начинает игру заново
+                case 888: game.start(); break;
+                // Обрабатывает ответ
+                default: game.giveAnswer(btnNum);
+            }
+            console.log(btnNum);
         }
-    });
 
-    /* РЕЗУЛЬТАТ */
-    /*
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - o - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - -
-    */
+        /* РЕЗУЛЬТАТ */
+        /*
+            Игра "Кто хочет стать миллионером"
+            Вопрос: Среднестатистическое количество колес у автомобиля
+            Нажмите для ответа: [Три] [Четыре] [Пять] [Шесть]
+            [Завершить игру] [Сыграть ещё]
+        */
 
-</script>
+    </script>
 </body>
+
 </html>

@@ -18,9 +18,10 @@
     -->
 
     <script>
-        const divEl = document.querySelector("div");
-        divEl.innerHTML = "<h3>hello world</h3>";
-        console.log(document.querySelector("div > h3"));//<h3>
+        const template = document.createElement('template');
+        template.innerHTML = "<h3>hello world</h3>";
+        document.querySelector("div").appendChild(template.content.firstChild);
+        console.log(document.querySelector("div > h3"));//<h3>hello world</h3>
     </script>
 </body>
 

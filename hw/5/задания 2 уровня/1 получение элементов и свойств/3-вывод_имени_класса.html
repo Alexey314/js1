@@ -18,7 +18,9 @@
     -->
 
     <script>
-        
+        let h2ElList = document.getElementsByTagName("h2");
+        for ( let i = 0; i < h2ElList.length; i++ )
+            console.log(h2ElList[i].className);
     </script>
 </body>
 </html>

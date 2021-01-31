@@ -55,26 +55,26 @@
 
         const starElList = document.querySelectorAll("i.fas.fa-star");
 
-        /* Каждой звезде создаем индивидуальный обработчик, запоминающий индекс этой звезды.
+        /* Каждой звезде создаем индивидуальный обработчик, запоминающий индекс этой звезды в окружении.
            Обработчики вызывают changeStars, передавая индекс звезды - источника события и выделить ли ее.
         */
         starElList.forEach(function (starEl, starElIndex) {
 
-            starEl.addEventListener("mouseover", function (event){
+            starEl.addEventListener("mouseover", function (){
                 changeStars(starElIndex, true );
             });
-            starEl.addEventListener("mouseout", function (event){
+            starEl.addEventListener("mouseout", function (){
                 changeStars(starElIndex, false );
             });
         });
 
         /**
-         * Общий обработчик отрисовки всех звезд.
-         * @param {Number} starElIndex - индекс звезды под курсором на момент события мыши.
-         * @param {boolean} mark - выделить ли звезду. */
+         * Меняет стили звезд.
+         * @param {Number} starElIndex - индекс звезды - источника события.
+         * @param {boolean} mark - выделить ли звезду и ее предыдущих соседок. */
         function changeStars(starElIndex, mark){
             for ( let i = 0; i <= starElIndex; i++){
-                starElList[i].classList.toggle(goldenClass, mark);
+                starElList[i].classList.toggle(goldenClass, mark);//операцию определяет значение mark
             }
         }
 

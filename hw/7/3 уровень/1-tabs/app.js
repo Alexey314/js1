@@ -16,7 +16,7 @@ const textEl = document.querySelector(".text");
 const navElList = document.querySelectorAll(".nav-link");
 let activeNavEl = navElList[0];
 
-navElList.forEach(function (navEl, index) {
+navElList.forEach(function (navEl) {
     navEl.addEventListener("click",clickHandler);
 });
 

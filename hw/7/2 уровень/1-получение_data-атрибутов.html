@@ -21,13 +21,13 @@
 
     <script>
         "use strict";
-        const btnElColl = document.querySelectorAll("button");
+        const btnElList = document.querySelectorAll("button");
 
         function clickHandler(event) {
             console.log(event.currentTarget.dataset.id, event.currentTarget.dataset.value);
         }
 
-        btnElColl.forEach(function (btn) {
+        btnElList.forEach(function (btn) {
             btn.addEventListener("click", clickHandler);
         });
     </script>
